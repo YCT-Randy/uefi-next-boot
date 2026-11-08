@@ -1,0 +1,21 @@
+# 本機編譯與發佈產物會記錄環境路徑，請由原始碼重新產生。
+/build/
+/cmake-build-*/
+/dist/
+/dist-*/
+
+# 本機設定與憑證不應進入版本控制。
+.env
+.env.*
+!.env.example
+CMakeUserPresets.json
+*.user
+*.key
+*.pem
+*.p12
+*.pfx
+
+# 編輯器快取與本機實測截圖可能含有裝置識別資料。
+/.vs/
+/.vscode/
+/螢幕擷取畫面*.png

@@ -1,0 +1,8 @@
+﻿[Desktop Entry]
+Type=Application
+Name=Boot Manager
+Comment=選擇下一次 UEFI 開機項目
+Exec=boot-manager
+Icon=computer
+Terminal=false
+Categories=System;Settings;

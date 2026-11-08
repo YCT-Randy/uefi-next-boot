@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+if [ "$#" -lt 1 ]; then echo "usage: boot-manager-helper set-next XXXX | reboot" >&2; exit 2; fi
+case "$1" in
+ set-next)
+  [ "$#" -eq 2 ] || exit 2
+  id="$2"
+  case "$id" in *[!0-9A-Fa-f]*|'') echo "invalid boot id" >&2; exit 2;; esac
+  [ "${#id}" -eq 4 ] || exit 2
+  entries=$(efibootmgr -v) || exit 1
+  printf '%s\n' "$entries" | grep -Eiq "^Boot${id}[* ]" || { echo "boot entry not found" >&2; exit 1; }
+  printf '%s\n' "$entries" | grep -Eiq "^Boot${id}[* ].*File\(" || { echo "EFI path missing" >&2; exit 1; }
+  efibootmgr -n "$id"
+  verify=$(efibootmgr) || exit 1
+  printf '%s\n' "$verify" | grep -Eiq "^BootNext: *${id}$" || { echo "BootNext verification failed" >&2; exit 1; }
+  ;;
+ reboot) [ "$#" -eq 1 ] || exit 2; exec systemctl reboot ;;
+ *) echo "unsupported operation" >&2; exit 2;;
+esac
